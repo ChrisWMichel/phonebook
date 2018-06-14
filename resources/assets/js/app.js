@@ -29,6 +29,10 @@ const router = new VueRouter({
 
 });
 
+Vue.filter('phone_check', function (phone) {
+    return phone.replace(/[^0-9]/g, '')
+        .replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+});
 
 const app = new Vue({
     router,

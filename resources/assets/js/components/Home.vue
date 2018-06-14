@@ -20,10 +20,11 @@
                 </p>
             </div>
 
-            <a class="panel-block is-active" v-for="user in users" :key="user.id">
+            <a class="panel-block is-active" v-for="(user) in users" :key="user.id">
 
             <span class="column is-9" >
-                {{user.name}} &nbsp; {{user.email}} &nbsp; {{user.phone}}<br>
+                {{user.name}} &nbsp; {{user.email}} &nbsp; {{user.phone | phone_check}}
+
             </span>
 
 
@@ -34,25 +35,31 @@
                   <i class="has-text-info fa fa-edit" aria-hidden="true"></i>
                 </span>
                 <span class="panel-icon column is-1">
-                  <i class="has-text-success fa fa-eye" aria-hidden="true"></i>
+                  <i class="has-text-success fa fa-eye" aria-hidden="true" @click="openShow(user)"></i>
                 </span>
             </a>
         </nav>
         <app-add :active="addActive" @close_form="closeForm"></app-add>
+
+        <app-show :showActive="showActive" :contact="record" @close_form="closeForm"></app-show>
     </div>
 </template>
 
 <script>
     import AddContact from './AddContact'
+    import ShowContact from './ShowRecord'
     export default {
         name: "Home",
         components:{
-            appAdd: AddContact
+            appAdd: AddContact,
+            appShow: ShowContact
         },
         data(){
             return{
                 addActive:'',
-                users: ''
+                users: '',
+                showActive:'',
+                record: ''
             }
         },
         created(){
@@ -74,7 +81,13 @@
             },
             closeForm(){
                 this.addActive = '';
+                this.showActive = '';
                 this.contacts();
+            },
+            openShow(user){
+                this.showActive = 'is-active';
+                this.record = user;
+                console.log(this.record);
             }
         }
     }

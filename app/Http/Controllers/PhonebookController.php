@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PhonebookRequest;
 use App\Phonebook;
 use Illuminate\Http\Request;
 
@@ -18,9 +19,11 @@ class PhonebookController extends Controller
     }
 
     public function getRecords(){
-        $contacts = Phonebook::all();
+        //$contacts = Phonebook::all();
 
-        return response($contacts->jsonSerialize());
+        return Phonebook::orderBy('name', 'asc')->get();
+
+        //return response($contacts->jsonSerialize());
     }
 
     /**
@@ -39,17 +42,11 @@ class PhonebookController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PhonebookRequest $request)
     {
 
         Phonebook::create($request->all());
-        /*$contact = new Phonebook();
-        $contact->name = $request->name;
-        $contact->email = $request->email;
-        $contact->phone = $request->phone;
-        $contact->save();
 
-        return response($contact->jsonSerialize());*/
     }
 
     /**
@@ -81,9 +78,10 @@ class PhonebookController extends Controller
      * @param  \App\Phonebook  $phonebook
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Phonebook $phonebook)
+    public function update(Request $request, $id)
     {
-        //
+        $contact = Phonebook::find($id);
+        $contact->update($request->all());
     }
 
     /**

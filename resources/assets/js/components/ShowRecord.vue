@@ -1,5 +1,5 @@
 <template>
-    <div class="modal" :class="active">
+    <div class="modal" :class="showActive">
         <div class="modal-background"></div>
         <div class="modal-card">
             <header class="modal-card-head">
@@ -8,32 +8,29 @@
             </header>
             <section class="modal-card-body">
 
-                <div class="field" :class="{'has-error': errors.name}">
+                <div class="field">
                     <label class="label">Name</label>
                     <div class="control">
                         <input class="input" type="text" v-model="contact.name">
-                        <span class="help-block" v-for="error in errors.name" v-text="error"></span>
                     </div>
                 </div>
 
-                <div class="field" :class="{'has-error': errors.email}">
+                <div class="field">
                     <label class="label">Email</label>
                     <div class="control">
                         <input class="input" type="email" v-model="contact.email">
-                        <span class="help-block" v-for="error in errors.email" v-text="error"></span>
                     </div>
                 </div>
 
-                <div class="field" :class="{'has-error': errors.phone}">
+                <div class="field">
                     <label class="label">Phone</label>
                     <div class="control">
                         <input class="input" type="text" v-model="contact.phone">
-                        <span class="help-block" v-for="error in errors.phone" v-text="error"></span>
                     </div>
                 </div>
             </section>
             <footer class="modal-card-foot">
-                <button class="button is-success" @click="saveContact">Add Contact</button>
+                <button class="button is-success" @click="updateContact">Edit Contact</button>
                 <button class="button" @click="closeForm">Cancel</button>
             </footer>
         </div>
@@ -44,31 +41,27 @@
     import axios from 'axios'
 
     export default {
-        name: "AddContact",
-        props:['active'],
+        name: "ShowRecord",
+        props:['showActive', 'contact'],
         data(){
             return{
-                contact:{
-                    name: '',
-                    email: '',
-                    phone: ''
-                },
-                errors:[]
+
             }
         },
         methods:{
             closeForm(){
                 this.$emit('close_form')
             },
-            saveContact(){
-                axios.post('api/phonebook', this.$data.contact)
+            updateContact(){
+                let record ={
+                    name: this.contact.name,
+                    email: this.contact.email,
+                    phone: this.contact.phone
+                };
+                axios.put('api/phonebook/' + this.contact.id, record)
                     .then(resp => {
-                        console.log(resp);
+                        //console.log(resp);
                         this.closeForm();
-                    })
-                    .catch(error => {
-                        console.log(error.response.data.errors);
-                        this.errors = error.response.data.errors;
                     })
             }
         }
@@ -76,10 +69,5 @@
 </script>
 
 <style scoped>
-    .has-error input{
-        border: .5px solid red;
-    }
-    .help-block{
-        color: red;
-    }
+
 </style>
