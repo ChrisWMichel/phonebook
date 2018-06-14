@@ -10,11 +10,13 @@ require('./bootstrap');
 window.Vue = require('vue');
 import VueRouter from 'vue-router'
 import {routes} from './routes'
+import Main from './components/Main'
 
 Vue.use(VueRouter);
 
 const router = new VueRouter({
    routes,
+   // mode: 'history',
     scrollBehavior(to, from, savedPosition){
         if(savedPosition){
             return savedPosition;
@@ -27,9 +29,11 @@ const router = new VueRouter({
 
 });
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
 const app = new Vue({
     router,
-    el: '#app'
+    el: '#app',
+    components:{
+        appMain: Main
+    }
 });
