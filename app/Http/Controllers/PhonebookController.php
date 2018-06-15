@@ -45,7 +45,9 @@ class PhonebookController extends Controller
     public function store(PhonebookRequest $request)
     {
 
-        Phonebook::create($request->all());
+        $contact = Phonebook::create($request->all());
+
+        return response($contact->jsonSerialize());
 
     }
 
@@ -90,8 +92,8 @@ class PhonebookController extends Controller
      * @param  \App\Phonebook  $phonebook
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Phonebook $phonebook)
+    public function destroy($id)
     {
-        //
+        Phonebook::find($id)->delete();
     }
 }

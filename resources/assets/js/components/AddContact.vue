@@ -63,7 +63,15 @@
             saveContact(){
                 axios.post('api/phonebook', this.$data.contact)
                     .then(resp => {
-                        console.log(resp);
+                        this.$parent.users.push(resp.data);
+                        this.$parent.users.sort((a, b) => {
+                            if(a.name > b.name){
+                                return 1;
+                            }else{
+                                return -1;
+                            }
+                        });
+                        this.contact = '';
                         this.closeForm();
                     })
                     .catch(error => {
